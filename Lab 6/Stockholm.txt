@@ -1,0 +1,123 @@
+hostname Stockholm
+!
+boot-start-marker
+boot-end-marker
+!
+logging message-counter syslog
+!
+no aaa new-model
+memory-size iomem 15
+!
+dot11 syslog
+ip source-route
+!
+!
+ip cef
+!
+ip dhcp pool Kontor-Stockholm
+   network 10.40.105.0 255.255.255.0
+   default-router 10.40.105.1
+!
+!
+no ip domain lookup
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+voice-card 0
+!
+!
+!
+!
+!
+archive
+ log config
+  hidekeys
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ ip address 10.40.127.17 255.255.255.252
+ duplex full
+ speed auto
+!
+interface FastEthernet0/1
+ ip address 10.40.105.1 255.255.255.0
+ duplex full
+ speed auto
+!
+interface Serial0/0/0
+ ip address 10.40.127.38 255.255.255.252
+ no fair-queue
+!
+interface Serial0/0/1
+ ip address 10.40.127.41 255.255.255.252
+ clock rate 128000
+!
+router ospf 1
+ log-adjacency-changes
+ passive-interface FastEthernet0/1
+ network 10.40.105.0 0.0.0.255 area 0
+ network 10.40.127.16 0.0.0.3 area 0
+ network 10.40.127.36 0.0.0.3 area 0
+ network 10.40.127.40 0.0.0.3 area 0
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+line aux 0
+line vty 0 4
+ login
+!
+scheduler allocate 20000 1000
+ntp server 10.40.127.250
+end

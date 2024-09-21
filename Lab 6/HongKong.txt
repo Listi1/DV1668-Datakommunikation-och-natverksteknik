@@ -1,0 +1,182 @@
+show run
+Building configuration...
+
+
+Current configuration : 2002 bytes
+!
+! Last configuration change at 14:07:27 UTC Wed May 17 2023
+! NVRAM config last updated at 15:38:01 UTC Wed May 17 2023
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname HongKongRouter
+!
+boot-start-marker
+boot-end-marker
+!
+logging message-counter syslog
+!
+no aaa new-model
+!
+dot11 syslog
+ip source-route
+!
+!
+ip cef
+ip dhcp excluded-address 10.40.106.1
+!
+ip dhcp pool Kontor-HongKong
+   network 10.40.106.0 255.255.255.0
+   default-router 10.40.106.1 
+   dns-server 8.8.8.8 
+!
+!
+no ip domain lookup
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+voice-card 0
+!
+!
+!
+!
+!
+archive
+ log config
+  hidekeys
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ description IA Hongkong to Dubai
+ ip address 10.40.127.22 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ ip address 10.40.106.1 255.255.255.0
+ ip access-group 10 in
+ ip nat inside
+ ip virtual-reassembly
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ description HongKong to NewDelhi
+ ip address 10.40.127.61 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly
+ no fair-queue
+!
+interface Serial0/0/1
+ description Hongkong to Sydney
+ ip address 10.40.127.58 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly
+ clock rate 128000
+!
+router ospf 1
+ log-adjacency-changes
+ passive-interface FastEthernet0/1
+ network 10.40.106.0 0.0.0.255 area 2
+ network 10.40.127.20 0.0.0.3 area 2
+ network 10.40.127.56 0.0.0.3 area 2
+ network 10.40.127.60 0.0.0.3 area 2
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+!
+ip access-list extended blockig
+ deny   ip host 179.60.195.174 any
+ deny   eigrp any any
+ permit icmp any any
+ deny   ip host 86.98.8.127 any
+ deny   ip host 3.121.171.156 any
+!
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+line aux 0
+line vty 0 4
+ login
+!
+scheduler allocate 20000 1000
+ntp server 10.40.127.250
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

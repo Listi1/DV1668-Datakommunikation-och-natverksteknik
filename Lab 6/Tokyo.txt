@@ -1,0 +1,170 @@
+show run
+Building configuration...
+
+
+Current configuration : 2198 bytes
+!
+! Last configuration change at 07:13:31 UTC Sat Jan 1 2000
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname tokyo
+!
+boot-start-marker
+boot-end-marker
+!
+logging message-counter syslog
+!
+no aaa new-model
+!
+dot11 syslog
+ip source-route
+!
+!
+ip cef
+ip dhcp excluded-address 192.168.0.1
+!
+ip dhcp pool kontor-tokyo
+   network 192.168.0.0 255.255.0.0
+   default-router 192.168.0.1 
+   dns-server 8.8.8.8 
+!
+!
+no ip domain lookup
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+voice-card 0
+!
+!
+!
+!
+!
+archive
+ log config
+  hidekeys
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 10.40.127.253 255.255.255.252
+!
+interface FastEthernet0/0
+ description tokyo-sydney
+ ip address 10.40.127.69 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ description tokyo switch
+ ip address 192.168.0.1 255.255.0.0
+ ip nat inside
+ ip virtual-reassembly
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ description NED DEHLI
+ ip address 10.40.127.66 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly
+ ip policy route-map se0
+ no fair-queue
+!
+interface Serial0/0/1
+ description sanfransisco
+ ip address 10.40.127.73 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly
+!
+router ospf 1
+ log-adjacency-changes
+ passive-interface FastEthernet0/1
+ network 10.40.127.64 0.0.0.3 area 2
+ network 10.40.127.68 0.0.0.3 area 2
+ network 10.40.127.72 0.0.0.3 area 2
+ network 10.40.127.252 0.0.0.3 area 2
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+ip nat inside source route-map se0 interface Serial0/0/0 overload
+ip nat inside source route-map se1 interface Serial0/0/1 overload
+!
+access-list 1 permit 192.168.0.0 0.0.255.255
+!
+!
+!
+!
+route-map se0 permit 10
+ match ip address 1
+ set interface Serial0/0/0
+!
+route-map se1 permit 10
+ match ip address 1
+ set interface Serial0/0/1
+!
+route-map map permit 10
+ match ip address 1
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+line aux 0
+line vty 0 4
+ login
+!
+scheduler allocate 20000 1000
+ntp source Loopback0
+ntp master 1
+ntp server 10.40.127.250
+end
+
+
