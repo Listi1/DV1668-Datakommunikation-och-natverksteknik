@@ -1,0 +1,62 @@
+banner motd Unauthorized access is not allowed!
+
+enable secret PASSWORD
+
+line console 0
+password PASSWORD
+login
+
+line vty 0 15
+password PASSWORD
+login
+
+service password-encryption
+
+no ip domain-lookup
+
+
+
+
+BR1:
+hostname BR1
+
+interface g0/0/0
+ip address 
+description MESSASGE
+no shutdown
+
+interface g0/0/1
+ip address
+description MESSAGE
+no shutdown
+
+
+
+BR2:
+hostname BR2
+
+interface g0/0/0
+ip address 
+description MESSAGE
+no shutdown
+
+interface g0/0/1
+ip address
+description MESSAGE
+no shutdown
+
+S1:
+hostname S1
+
+interface vlan1
+ip address SECONDINBR1
+no shutdown
+ip default-gateway BR1ADDRESS
+
+S2:
+hostname S2
+
+interface vlan1 
+ip address SECONDINBR2
+no shutdown
+ip default-gateway BR2ADDRESS
